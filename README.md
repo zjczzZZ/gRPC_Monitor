@@ -4,6 +4,8 @@
 
 三、使用tcpdump抓包，wireshark分析可见流式grpc请求与返回过程
 
+四、先在服务端启动Monitor_Sync_Server.py，再启动cpp客户端连接并获取流式监控信息
+
 命令行如下：
 proto生成python版本
 ```
