@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option cc_generic_services = false;
+
+message CpuMessage{
+    double load = 1;   // cpu负载 %
+}
+
+message MemMessage {
+    double mem_use =1;          // 已用内存
+    double mem_rate=2;          // 内存负载
+}
+
+message NetMessage {
+    double net_recv_Rate = 1;        // 收速率 KB/s
+    double net_send_Rate = 2;        // 发速率 KB/s
+}
+
+
+message ProcessMessage{
+    string proc_Name = 1;   //进程名
+    bool isRunning = 2;     //状态
+    double cpu_load = 3;    //cpu负载%
+    double mem_load = 4;    //内存负载%
+    double mem_use = 5;
+    double net_recv_Rate = 6;    //收
+    double net_send_Rate = 7;   //发
+}
+
+//监控信息返回值
+message MonitorMessage{
+    CpuMessage cpum = 1;
+    MemMessage memm =2;
+    NetMessage netm =3;
+    repeated ProcessMessage procm = 4;  //可重复 监控多个进程
+}
+
+message ProcMonitorRequest{
+    bool add_del = 1;
+    repeated string name = 2;
+}
+
+message ShellExe{
+    int32 shellnum = 1;
+}
+
+
+//定义服务接口
+service GrpcService {
+    rpc MonitorTick (google.protobuf.Empty) returns (stream MonitorMessage) {}  
+    rpc ProcessMonitorCtrl (ProcMonitorRequest) returns (google.protobuf.Empty) {}
+    rpc ShellControl (ShellExe) returns (google.protobuf.Empty) {}
+}
